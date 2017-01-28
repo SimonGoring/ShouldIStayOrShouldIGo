@@ -24,6 +24,12 @@ At the January 25th meeting of the UBC R Study Group](https://github.com/minisci
 
 We will calculate the probability that it is better to wait or walk at the level of the individual stop, to provide a leaflet map with color coded markers.  There will be the addition of a `resolution` parameter, that will then aggregate the individual points to some sort of gridded raster.
 
+The idea is that the map should look something like this:
+
+![Sample Map](images/test_map.png)
+
+This is encoded using the API in a sample script in the R directory, in the [`test_map.R`](https://github.com/SimonGoring/ShouldIStayOrShouldIGo/blob/master/R/samples/test_map.R) file.
+
 ## Using This Repository
 
 The repository is coded as a [Shiny](https://shiny.rstudio.com/) app.  We recommend using RStudio, given its integration with Shiny.  The Translink API requires the use of a private key that is passed as part of the API string:
