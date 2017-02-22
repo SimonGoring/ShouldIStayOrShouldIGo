@@ -26,10 +26,10 @@ stop_locs <- stops %>%
                             stringsAsFactors = FALSE)) %>% 
   bind_rows()
 
-
 # This is a very simple way of setting up a simple color scheme:
 #  It's not how we'd do it in practice.
 stop_locs$dist <- sqrt((49.187706 - stop_locs$latitude)^2 + (-122.850060 - stop_locs$longitude)^2)
+
 cuts <- cut(stop_locs$dist, breaks = 12)
 stop_locs$color <- diverge_hcl(12, h = c(255, 330), l = c(40, 90))[cuts]
 

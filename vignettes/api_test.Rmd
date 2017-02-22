@@ -1,0 +1,41 @@
+---
+title: "Testing Translink API"
+author: "UBC R Study Group"
+output:
+  html_document:
+    code_folding: show
+    highlight: pygment
+    number_sections: yes
+    theme: journal
+    toc: yes
+    toc_depth: 3
+    toc_float: true
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+  word_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+This is just a document to look at how the API is going to work:
+
+```{r}
+
+#  loading in the API key:
+key <- scan('../data/config.txt', what = 'character')
+
+route <- 20
+# Build the API query:
+uri <- paste0('http://api.translink.ca/rttiapi/v1/routes/',route,'?apikey=',
+              key)
+
+aa <- httr::GET(uri,
+    content_type('application/JSON'))
+
+stops <- xml2::as_list(xml2::read_xml(httr::content(aa, "text")))
+
+str(stops)
+```
+
+That's the stops.
