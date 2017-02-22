@@ -35,7 +35,41 @@ aa <- httr::GET(uri,
 
 stops <- xml2::as_list(xml2::read_xml(httr::content(aa, "text")))
 
-str(stops)
+aa <- sf::st_read(textConnection(system()))
+
+u_kmz <- "http://nb.translink.ca/geodata/trip/020-NB1.kmz"
+download.file(u_kmz, "020-NB1.kmz")
+
+aa <- sf::st_read('020-NB1.kmz')
 ```
 
-That's the stops.
+
+So, 
+```{r}
+
+centerpoints <- expand.grid(lat = seq(49.0, 49.375, by = 0.02),
+                            long = seq(-123.3, -121.75, by = 0.03))
+
+get_stops <- function(x) {
+  uri <- paste0('https://api.translink.ca/rttiapi/v1/stops?apikey=',
+                key,
+                '&lat=',x[1],'&long=',x[2],'&radius=2000')
+  
+  aa <- httr::GET(uri,
+      content_type('application/JSON'))
+  
+  stops <- xml2::as_list(xml2::read_xml(httr::content(aa, "text")))
+  
+  stop_locs <- stops %>% 
+    map(function(x)data.frame(stop = x$Name[[1]], 
+                              longitude = as.numeric(x$Longitude[[1]]),
+                              latitude = as.numeric(x$Latitude[[1]]),
+                              stringsAsFactors = FALSE)) %>% 
+    bind_rows()
+  return(stop_locs)
+}
+
+all_stops <- centerpoints %>% by_row(get_stops)
+
+
+```
