@@ -55,21 +55,31 @@ get_stops <- function(x) {
                 key,
                 '&lat=',x[1],'&long=',x[2],'&radius=2000')
   
-  aa <- httr::GET(uri,
-      content_type('application/JSON'))
+  aa <- httr::GET(uri)
   
   stops <- xml2::as_list(xml2::read_xml(httr::content(aa, "text")))
   
   stop_locs <- stops %>% 
-    map(function(x)data.frame(stop = x$Name[[1]], 
+    map(function(x)data.frame(stopNo = x$StopNo[[1]],
+                              stop = x$Name[[1]], 
                               longitude = as.numeric(x$Longitude[[1]]),
                               latitude = as.numeric(x$Latitude[[1]]),
+                              city     = x$City[[1]],
                               stringsAsFactors = FALSE)) %>% 
     bind_rows()
+  
   return(stop_locs)
 }
 
-all_stops <- centerpoints %>% by_row(get_stops)
+all_stops <- centerpoints %>% 
+  by_row(get_stops) %>% 
+  select(.out) %>% 
+  unlist(recursive = FALSE) %>% 
+  bind_rows() %>% 
+  unique()
 
+saveRDS(all_stops, '../data/output/all_stops.RDS')
 
 ```
+
+So now we've got every unique bus stop in Vancouver.
