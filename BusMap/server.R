@@ -9,14 +9,20 @@
 
 library(shiny)
 library(leaflet)
+library(dplyr)
+
+all_stops <- readRDS('../data/output/all_stops.RDS')
+stations <- all_stops %>% filter(grepl(" STN ", stop))
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-   
+  
   output$vanMap <- renderLeaflet({
-    map <- leaflet(width = 400, height = 400) %>% addTiles %>% 
+    map <- leaflet(width = 400, height = 800) %>% addTiles %>% 
       setView(lng = -122.8,
                    lat = 49.2,
-                   zoom = 11)
+                   zoom = 11) %>% 
+      addCircles(lat = stations$latitude,
+                 lng = stations$longitude)
   })
 })

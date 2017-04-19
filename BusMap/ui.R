@@ -6,7 +6,7 @@
 # 
 #    http://shiny.rstudio.com/
 #
-
+library(leaflet)
 library(shiny)
 
 # Define UI for application that draws a histogram
@@ -32,7 +32,7 @@ shinyUI(fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-       leafletOutput("vanMap")
+       leafletOutput("vanMap", height = 800)
     )
   )
 ))

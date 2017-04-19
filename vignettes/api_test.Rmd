@@ -71,6 +71,7 @@ get_stops <- function(x) {
   return(stop_locs)
 }
 
+
 all_stops <- centerpoints %>% 
   by_row(get_stops) %>% 
   select(.out) %>% 
